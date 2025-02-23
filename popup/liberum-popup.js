@@ -52,7 +52,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   function setConnectedState() {
     connectedImg.style.display = "block";
     disconnectedImg.style.display = "none";
-    connectText.innerText = "Libereum is Connected";
+    connectText.innerText = "Liberum is Connected";
     connecDesc.innerText =
       "You're now ready to explore .lib domains directly from the blockchain.";
 
@@ -66,7 +66,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   function setDisconnectedState() {
     connectedImg.style.display = "none";
     disconnectedImg.style.display = "block";
-    connectText.innerText = "Libereum is Disconnected";
+    connectText.innerText = "Liberum is Disconnected";
     connecDesc.innerText =
       "Enable Liberum to explore .lib domains from the blockchain.";
 
