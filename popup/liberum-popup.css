@@ -1,0 +1,152 @@
+:root {
+  --color-primary: #ff7200;
+  --color-secondary: #ff9902;
+  --color-tertiary: #fdc97e;
+  --color-white: #fafafa;
+}
+
+body {
+  background-color: var(--color-white);
+  width: 360px;
+  height: 600px;
+  overflow: hidden;
+  box-sizing: border-box;
+  padding: 20px;
+  position: relative;
+  margin: 0;
+}
+
+.logo {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.connection-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-top: 36px;
+}
+
+.connection-box .toggle {
+  width: 133px;
+  height: 133px;
+}
+
+.connect-text-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 24px;
+  text-align: center;
+}
+
+.connect-text-box #connect-text {
+  font-size: 20px;
+  font-weight: 500;
+  color: black;
+}
+
+.connect-text-box #connect-desc {
+  font-size: 16px;
+  font-weight: 300;
+  color: black;
+  opacity: 0.6;
+  margin-top: 12px;
+}
+
+.search-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 50px;
+}
+
+.search-container .search-box {
+  position: relative;
+  width: 100%;
+}
+
+.search-container .search-box input {
+  width: 100%;
+  height: 52px;
+  border: 1px solid black;
+  border-radius: 6px;
+  padding: 6px 40px 6px 10px;
+  font-size: 16px;
+  color: black;
+  outline: none;
+  background-color: rgba(255, 153, 2, 0.6);
+}
+
+.search-container .search-box input:focus {
+  background-color: rgba(255, 153, 2, 0.8);
+}
+
+.search-container .search-box img {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.search-container .search-box input::placeholder {
+  color: black;
+  opacity: 0.6;
+}
+
+.search-container #search-button {
+  width: 60%;
+  height: 40px;
+  background-color: var(--color-secondary);
+  border-radius: 6px;
+  font-size: 16px;
+  font-weight: 700;
+  color: black;
+  margin-top: 30px;
+}
+
+.rect1 {
+  position: absolute;
+  top: -10%;
+  left: -10%;
+}
+
+.rect2 {
+  position: absolute;
+  top: -15%;
+  left: -15%;
+}
+
+.blockspace {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 14px;
+}
+
+.blockspace a {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+}
+
+.blockspace a p {
+  font-size: 15px;
+  font-weight: 500;
+  color: black;
+  opacity: 0.8;
+}
+
+.blockspace .right-arrow-box {
+  width: 30px;
+  height: 30px;
+  border-radius: 9999px;
+  background-color: var(--color-secondary);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Libereum</title>
+    <link rel="stylesheet" href="liberum-popup.css">
+    <link rel="stylesheet" href="../styles/main.css">
+    <script src="liberum-popup.js">
+    </script>
+</head>
+
+<body>
+    <header>
+        <div class="logo">
+            <a href="https://liberum.lib" rel="noopener noreferrer">
+                <img src="../resources/logo.png" alt="logo" />
+            </a>
+        </div>
+    </header>
+    <main>
+        <div class="connection-box">
+            <button id="toggle">
+                <img id="connected-img" src="../resources/connected.png" alt="Connected">
+                <img id="disconnected-img" src="../resources/disconnected.png" alt="Disconnected"
+                    style="display: none;">
+            </button>
+            <div class="connect-text-box">
+                <p id="connect-text"></p>
+                <p id="connect-desc"></p>
+            </div>
+        </div>
+        <div class="search-container">
+            <div class="search-box">
+                <input type="text" id="search-input" placeholder="Domain or contract address">
+                <img src="../resources/search.png" alt="Search">
+            </div>
+            <button id="search-button">
+                Search
+            </button>
+        </div>
+        <div class="blockspace">
+            <a href="blockspace.html" rel="noopener noreferrer">
+                <p>Get Your Blockspace</p>
+                <div class="right-arrow-box">
+                    <img src="../resources/right-arrow.png" alt="right-arrow">
+                </div>
+            </a>
+        </div>
+    </main>
+    <div>
+        <img class="rect1" src="../resources/rectangle.png" alt="rect1">
+        <img class="rect2" src="../resources/rectangle.png" alt="rect2">
+    </div>
+</body>
+
+</html>
