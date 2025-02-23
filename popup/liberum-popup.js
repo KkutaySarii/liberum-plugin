@@ -100,8 +100,45 @@ document.addEventListener("DOMContentLoaded", function () {
       return;
     }
 
-    chrome.tabs.create({
-      url: `https://liberum.network/search?q=${query}`,
-    });
+    //TODO: Implement search functionality
+    let content = `<!DOCTYPE html>
+    <!DOCTYPE html>
+    <html lang="tr">
+      <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Metamask Bağlantı</title>
+        <script src="https://cdn.jsdelivr.net/npm/web3/dist/web3.min.js"></script>
+      </head>
+      <body>
+        <h1>Metamask Cüzdan Bağlantısı</h1>
+        <button id="connectButton">Metamask Bağla</button>
+        <p id="walletAddress"></p>
+    
+        <script>
+          document
+            .getElementById("connectButton")
+            .addEventListener("click", async function () {
+              if (window.ethereum) {
+                try {
+                  const accounts = await window.ethereum.request({
+                    method: "eth_requestAccounts",
+                  });
+                  document.getElementById("walletAddress").innerText =
+                    "Bağlı Cüzdan: " + accounts[0];
+                } catch (error) {
+                  console.error("Cüzdan bağlanırken hata oluştu:", error);
+                }
+              } else {
+                alert("Metamask veya bir Web3 cüzdanı yükleyin!");
+              }
+            });
+        </script>
+      </body>
+    </html>
+    `;
+    let newTab = `data:text/html;charset=utf-8,${encodeURIComponent(content)}`;
+
+    chrome.tabs.create({ url: newTab });
   });
 });

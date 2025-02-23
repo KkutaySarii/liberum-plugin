@@ -26,6 +26,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 });
 
 async function fetchBlockspaceInfo() {
+  // TODO: Implement this function
   return {
     name: "kerem.lib", // Burada domain kontrattan çekilecek
     content: "0x8798asdahfas8fa98...", // İçerik kontrattan çekilecek
