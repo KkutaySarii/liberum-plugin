@@ -1,0 +1,66 @@
+:root {
+  --color-primary: #ff7200;
+  --color-secondary: #ff9902;
+  --color-tertiary: #fdc97e;
+  --color-white: #fafafa;
+}
+
+body {
+  background-color: var(--color-white);
+  width: 326px;
+  height: 543px;
+  overflow: hidden;
+  box-sizing: border-box;
+  padding: 20px;
+  position: relative;
+  margin: 0;
+}
+
+.rect1 {
+  position: absolute;
+  top: -10%;
+  left: -10%;
+}
+
+.rect2 {
+  position: absolute;
+  top: -15%;
+  left: -15%;
+}
+
+.logo {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.blockspace {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 14px;
+}
+
+.blockspace a {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+}
+
+.blockspace a p {
+  font-size: 14px;
+  font-weight: 500;
+  color: black;
+  opacity: 0.8;
+}
+
+.blockspace .right-arrow-box {
+  width: 30px;
+  height: 30px;
+  border-radius: 9999px;
+  background-color: var(--color-secondary);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

@@ -7,6 +7,7 @@
     <title>Libereum</title>
     <link rel="stylesheet" href="liberum-popup.css">
     <link rel="stylesheet" href="../styles/main.css">
+    <link rel="stylesheet" href="../styles/popup.css">
     <script src="liberum-popup.js">
     </script>
 </head>
@@ -36,13 +37,20 @@
                 <input type="text" id="search-input" placeholder="Domain or contract address">
                 <img src="../resources/search.png" alt="Search">
             </div>
-            <button id="search-button">
-                Search
+            <button id="search-button" onclick="search()">
+                <span class="search-button-text" style="opacity: 0.5;">Search</span>
             </button>
         </div>
         <div class="blockspace">
-            <a href="blockspace.html" rel="noopener noreferrer">
+            <a id="no-lib-block" href="https://liberum-frontend.vercel.app/mint" rel="noopener noreferrer"
+                style="display: flex;">
                 <p>Get Your Blockspace</p>
+                <div class="right-arrow-box">
+                    <img src="../resources/right-arrow.png" alt="right-arrow">
+                </div>
+            </a>
+            <a id="lib-block" href="blockspace.html" rel="noopener noreferrer" style="display: none;">
+                <p>About This Blockspace</p>
                 <div class="right-arrow-box">
                     <img src="../resources/right-arrow.png" alt="right-arrow">
                 </div>

@@ -1,0 +1,45 @@
+.return-box {
+  position: absolute;
+  z-index: 10;
+  top: 26px;
+  left: 20px;
+}
+
+.return-box a {
+  width: 24px;
+  height: 24px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--color-secondary);
+  border-radius: 9999px;
+}
+
+.info-container {
+  display: flex;
+  flex-direction: column;
+  max-width: 240px;
+  margin: 0 auto;
+  margin-top: 60px;
+}
+
+.info-container .info {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.info-container .info .info-title {
+  font-size: 22px;
+  font-weight: 400;
+  color: black;
+}
+
+.info-container .info .info-text {
+  font-size: 18px;
+  font-weight: 200;
+  color: black;
+  opacity: 0.8;
+  margin-top: 10px;
+}
