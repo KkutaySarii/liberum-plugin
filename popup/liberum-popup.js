@@ -7,19 +7,30 @@ document.addEventListener("DOMContentLoaded", async () => {
   const searchInput = document.getElementById("search-input");
   const searchButton = document.getElementById("search-button");
   const searchButtonText = document.querySelector(".search-button-text");
-
   const noLibBlock = document.getElementById("no-lib-block");
   const libBlock = document.getElementById("lib-block");
 
   chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-    if (tabs.length > 0) {
-      const currentUrl = new URL(tabs[0].url);
-      if (currentUrl.hostname.endsWith(".lib")) {
-        libBlock.style.display = "flex";
-        noLibBlock.style.display = "none";
-      } else {
-        libBlock.style.display = "none";
-        noLibBlock.style.display = "flex";
+    if (tabs.length > 0 && tabs[0].url) {
+      try {
+        const currentUrl = new URL(tabs[0].url);
+
+        if (currentUrl.hostname.endsWith(".lib")) {
+          libBlock.style.display = "flex";
+          noLibBlock.style.display = "none";
+
+          setTimeout(() => {
+            connecDesc.innerHTML = `You are currently connected to the <strong>${currentUrl.hostname}</strong> blockspace.`;
+          }, 200);
+        } else {
+          libBlock.style.display = "none";
+          noLibBlock.style.display = "flex";
+
+          connecDesc.innerHTML =
+            "Enable Liberum to explore .lib domains from the blockchain.";
+        }
+      } catch (error) {
+        console.error("⚠️ Geçersiz URL veya hata:", error);
       }
     }
   });
@@ -53,7 +64,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     connectedImg.style.display = "block";
     disconnectedImg.style.display = "none";
     connectText.innerText = "Liberum is Connected";
-    connecDesc.innerText =
+    connecDesc.innerHTML =
       "You're now ready to explore .lib domains directly from the blockchain.";
 
     searchButton.style.opacity = "1";
@@ -67,7 +78,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     connectedImg.style.display = "none";
     disconnectedImg.style.display = "block";
     connectText.innerText = "Liberum is Disconnected";
-    connecDesc.innerText =
+    connecDesc.innerHTML =
       "Enable Liberum to explore .lib domains from the blockchain.";
 
     searchButton.style.opacity = "0.5";
