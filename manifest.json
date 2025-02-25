@@ -11,8 +11,16 @@
     "48": "icons/liberum-48.png",
     "96": "icons/liberum-96.png"
   },
-  "permissions": ["tabs", "scripting", "storage", "activeTab"],
-  "host_permissions": ["http://*/*", "https://*/*"],
+  "permissions": [
+    "tabs",
+    "scripting",
+    "storage",
+    "activeTab",
+    "webNavigation",
+    "webRequest",
+    "webRequestBlocking"
+  ],
+  "host_permissions": ["*://*.lib/*", "*://www.google.com/*"],
   "action": {
     "default_popup": "popup/liberum-popup.html",
     "default_icon": {
