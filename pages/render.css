@@ -1,0 +1,15 @@
+#liberum-loading {
+  height: 100vh !important;
+}
+
+#liberum-loading p {
+  font-size: 24px;
+  font-weight: 500;
+  color: black;
+  margin-top: 24px;
+}
+
+#liberum-loading .spinner {
+  width: 72px !important;
+  height: 72px !important;
+}
