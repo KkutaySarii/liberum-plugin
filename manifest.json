@@ -2,36 +2,17 @@
   "manifest_version": 3,
   "name": "Libereum Extension",
   "version": "1.0",
-  "description": "Libereum blockchain üzerinde .lib uzantılı domainleri çözen tarayıcı uzantısı.",
+  "description": "Decentralized .lib domains resolver",
+  "background": {
+    "service_worker": "background.js"
+  },
   "icons": {
     "32": "icons/liberum-32.png",
     "48": "icons/liberum-48.png",
     "96": "icons/liberum-96.png"
   },
-  "background": {
-    "service_worker": "background.js"
-  },
-  "permissions": [
-    "storage",
-    "tabs",
-    "activeTab",
-    "storage",
-    "webRequest",
-    "webRequestBlocking",
-    "http://*.lib/*",
-    "https://*.lib/*",
-    "declarativeNetRequest"
-  ],
-  "declarative_net_request": {
-    "rule_resources": [
-      {
-        "id": "ruleset_1",
-        "enabled": true,
-        "path": "rules.json"
-      }
-    ]
-  },
-  "host_permissions": ["http://*.lib/*", "https://*.lib/*"],
+  "permissions": ["tabs", "scripting", "storage", "activeTab"],
+  "host_permissions": ["http://*/*", "https://*/*"],
   "action": {
     "default_popup": "popup/liberum-popup.html",
     "default_icon": {
@@ -40,10 +21,7 @@
       "96": "icons/liberum-96.png"
     }
   },
-  "content_scripts": [
-    {
-      "matches": ["http://*.lib/*", "https://*.lib/*"],
-      "js": ["js/content-script.js"]
-    }
-  ]
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'self';"
+  }
 }

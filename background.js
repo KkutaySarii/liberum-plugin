@@ -1,38 +1,55 @@
-console.log("🔧 Libereum Background Worker Çalışıyor!");
+chrome.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
+  console.log("🔍 Tab Güncellendi:", tabId, changeInfo, tab);
 
-// İçerik çözümleme isteğini dinle
-chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-  if (request.type === "resolveDomain") {
-    console.log(`📡 .lib domain tespit edildi: ${request.domain}`);
+  if (changeInfo.status === "complete" && tab.url) {
+    const url = new URL(tab.url);
 
-    getLibereumContent(request.domain)
-      .then((htmlContent) => {
-        console.log(`✅ İçerik bulundu, yönlendiriliyor: ${request.domain}`);
-        sendResponse({ html: htmlContent });
-      })
-      .catch((error) => {
-        console.error("❌ İçerik çekme hatası:", error);
-        sendResponse({ html: "<h1>Hata: İçerik Çekilemedi</h1>" });
-      });
+    // Eğer `chrome://` veya `chrome-extension://` ile başlayan bir URL varsa işlemi iptal et
+    if (url.protocol === "chrome:" || url.protocol === "chrome-extension:") {
+      console.warn(`⚠️ Chrome dahili sayfası tespit edildi: ${url.href}`);
+      return;
+    }
 
-    return true; // async işlemi tamamlamak için `true` dönüyoruz
+    if (url.hostname.endsWith(".lib")) {
+      console.log(`📡 .lib domain tespit edildi: ${url.hostname}`);
+
+      try {
+        // Akıllı kontrattan içeriği al
+        let content = await getLibereumContent(url.hostname);
+        console.log(`📡 Akıllı kontrattan alınan içerik:`, content);
+
+        let newTab = `data:text/html;charset=utf-8,${encodeURIComponent(
+          content
+        )}`;
+        console.log(`🆕 Yönlendirme için yeni URL:`, newTab);
+
+        // 🛠️ DEBUG: `tabId` gerçekten var mı?
+        console.log(`🔄 Güncellenecek Sekme ID'si:`, tabId);
+
+        // Eğer `tabId` geçerli değilse yeni sekme açmayı dene
+        if (tabId && tabId > 0) {
+          console.log(`🔄 Mevcut sekme güncelleniyor: ${tabId}`);
+          // chrome.tabs.update(tabId, { url: newTab }, () => {
+          //   if (chrome.runtime.lastError) {
+          //     console.error(
+          //       "❌ chrome.tabs.update Hatası:",
+          //       chrome.runtime.lastError
+          //     );
+          //   }
+          // });
+          chrome.tabs.create({ url: newTab });
+        } else {
+          console.warn("⚠️ Geçersiz tabId, yeni sekme açılıyor...");
+          chrome.tabs.create({ url: newTab });
+        }
+      } catch (error) {
+        console.error("Libereum içeriği alınırken hata oluştu:", error);
+      }
+    }
   }
 });
 
-// Libereum Blockchain ile etkileşim fonksiyonu
+// Sahte içerik dönen örnek `getLibereumContent` fonksiyonu
 async function getLibereumContent(domain) {
-  console.log(`🔍 Akıllı kontrattan içerik çekme denemesi: ${domain}`);
-
-  const provider = new ethers.providers.JsonRpcProvider("SENİN_RPC_URL");
-  const contract = new ethers.Contract("KONTRAT_ADRESİ", ABI, provider);
-
-  try {
-    const content = await contract.getDomainContent(domain);
-    return content
-      ? content
-      : "<html><body><h1>Libereum Domain İçeriği Boş</h1></body></html>";
-  } catch (error) {
-    console.error("❌ Akıllı kontrat hatası:", error);
-    return "<html><body><h1>Hata: İçerik Çekilemedi</h1></body></html>";
-  }
+  return `<html><body><h1>${domain} - Liberum İçeriği</h1></body></html>`;
 }

@@ -1,17 +1,24 @@
-console.log("📝 Libereum Content Script Çalışıyor!");
+chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+  if (request.action === "updateContent") {
+    document.open();
+    document.write(request.content);
+    document.close();
+  }
+});
+chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+  if (request.type === "resolveDomain") {
+    console.log(`📡 .lib domain tespit edildi: ${request.domain}`);
 
-// Domain adını al
-const domain = window.location.hostname;
+    getLibereumContent(request.domain)
+      .then((htmlContent) => {
+        console.log(`✅ İçerik bulundu, yönlendiriliyor: ${request.domain}`);
+        sendResponse({ html: htmlContent });
+      })
+      .catch((error) => {
+        console.error("❌ İçerik çekme hatası:", error);
+        sendResponse({ html: "<h1>Hata: İçerik Çekilemedi</h1>" });
+      });
 
-if (domain.endsWith(".lib")) {
-  console.log(`🔍 Libereum için içerik kontrol ediliyor: ${domain}`);
-
-  fetch(`https://your-api.com/fetch?domain=${domain}`)
-    .then((response) => response.text())
-    .then((content) => {
-      document.open();
-      document.write(content);
-      document.close();
-    })
-    .catch((error) => console.error("❌ İçerik alınırken hata:", error));
-}
+    return true; // async işlemi tamamlamak için `true` dönüyoruz
+  }
+});

@@ -105,51 +105,60 @@ document.addEventListener("DOMContentLoaded", function () {
   const searchButton = document.getElementById("search-button");
   const searchInput = document.getElementById("search-input");
 
-  searchButton.addEventListener("click", () => {
+  searchInput.addEventListener("keyup", function (event) {
+    if (event.key === "Enter") {
+      event.preventDefault();
+      searchButton.click();
+    }
+  });
+
+  searchButton.addEventListener("click", async () => {
     const query = searchInput.value.trim();
     if (query === "") {
       return;
     }
 
-    //TODO: Implement search functionality
-    let content = `<!DOCTYPE html>
-    <!DOCTYPE html>
-    <html lang="tr">
-      <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Metamask Bağlantı</title>
-        <script src="https://cdn.jsdelivr.net/npm/web3/dist/web3.min.js"></script>
-      </head>
-      <body>
-        <h1>Metamask Cüzdan Bağlantısı</h1>
-        <button id="connectButton">Metamask Bağla</button>
-        <p id="walletAddress"></p>
-    
-        <script>
-          document
-            .getElementById("connectButton")
-            .addEventListener("click", async function () {
-              if (window.ethereum) {
-                try {
-                  const accounts = await window.ethereum.request({
-                    method: "eth_requestAccounts",
-                  });
-                  document.getElementById("walletAddress").innerText =
-                    "Bağlı Cüzdan: " + accounts[0];
-                } catch (error) {
-                  console.error("Cüzdan bağlanırken hata oluştu:", error);
-                }
-              } else {
-                alert("Metamask veya bir Web3 cüzdanı yükleyin!");
-              }
-            });
-        </script>
-      </body>
-    </html>
-    `;
-    let newTab = `data:text/html;charset=utf-8,${encodeURIComponent(content)}`;
+    document.getElementById("loader").style.visibility = "visible";
 
-    chrome.tabs.create({ url: newTab });
+    try {
+      const provider = new ethers.providers.JsonRpcProvider(RPC_URL);
+      const contract = new ethers.Contract(
+        GET_TOKEN_CONTRACT_ADDRESS,
+        GET_TOKEN_ID_ABI,
+        provider
+      );
+
+      const tokenID = await contract.getTokenIdByDomain(query);
+
+      if (tokenID) {
+        const pageContract = new ethers.Contract(
+          PAGE_LINKED_CONTRACT_ADDRESS,
+          PAGE_LINKED_ABI,
+          provider
+        );
+
+        const CA_HTML = await pageContract.pageLinkedDomain(tokenID);
+
+        if (CA_HTML) {
+          const HTML_CONTRACT = new ethers.Contract(
+            CA_HTML,
+            HTML_ABI,
+            provider
+          );
+          const content = await HTML_CONTRACT.getContent();
+          if (content) {
+            let newTab = `data:text/html;charset=utf-8,${encodeURIComponent(
+              content
+            )}`;
+            chrome.tabs.create({ url: newTab });
+          }
+        }
+      }
+    } catch (error) {
+      console.error("Kontrattan içerik çekme hatası:", error);
+      alert("İçerik yüklenirken hata oluştu!");
+    } finally {
+      document.getElementById("loader").style.visibility = "hidden";
+    }
   });
 });
