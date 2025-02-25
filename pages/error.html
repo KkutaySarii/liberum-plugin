@@ -6,13 +6,45 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Liberum Error</title>
     <link rel="stylesheet" href="error.css">
+    <link rel="stylesheet" href="../styles/main.css">
     <script src="error.js"></script>
 </head>
 
 <body>
-    <div class="error-container">
-        <h1 id="error-message">An error occurred</h1>
-        <a href="https://liberum-frontend.vercel.app/mint">Return to Liberum</a>
+    <div class="container">
+        <div class="no-minted-error-container">
+            <div>
+                <h1 class="title">This Blockspace Is Not Minted Yet</h1>
+                <p class="subtitle">Blockspace is your personal domain on the blockchain fully decentralized, fully
+                    yours.
+                </p>
+            </div>
+            <div>
+                <div class="domain-box">
+                    <div class="orange-box"></div>
+                    <h4 class="domain-name">aaa</h4>
+                </div>
+                <div class="button-group">
+                    <a href="" class="mint">
+                        Mint Now
+                    </a>
+                    <a href="https://www.liberum.space/mint" class="see-all">
+                        See All Blockspaces
+                    </a>
+                </div>
+            </div>
+            <div class="logo">
+                <a href="https://www.liberum.space/home" rel="noopener noreferrer">
+                    <img src="../resources/logo-big.png" alt="logo" />
+                </a>
+            </div>
+        </div>
+        <div class="fetch-error-container">
+            <h1 class="title">An error occurred while fetching content</h1>
+            <p class="subtitle">There was a technical error while fetching content or the content for this blockspace
+                has not been
+                created yet.</p>
+        </div>
     </div>
 
 </body>

@@ -15,12 +15,14 @@ document.addEventListener("DOMContentLoaded", async () => {
       try {
         const currentUrl = new URL(tabs[0].url);
 
-        if (currentUrl.hostname.endsWith(".lib")) {
+        const domain = currentUrl.search.split("domain=")[1];
+
+        if (domain) {
           libBlock.style.display = "flex";
           noLibBlock.style.display = "none";
 
           setTimeout(() => {
-            connecDesc.innerHTML = `You are currently connected to the <strong>${currentUrl.hostname}</strong> blockspace.`;
+            connecDesc.innerHTML = `You are currently connected to the <strong>${domain}</strong> blockspace.`;
           }, 200);
         } else {
           libBlock.style.display = "none";

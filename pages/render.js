@@ -3,7 +3,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   const domain = params.get("domain");
 
   if (!domain) {
-    redirectToError("❌ No domain provided");
+    redirectToError("fetch-error", "");
     return;
   }
 
@@ -15,7 +15,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     const content = await getLiberumContent(domain);
 
     if (!content || content.includes("❌")) {
-      redirectToError("❌ No content found for this domain");
+      redirectToError("no-minted", domain);
       return;
     }
 
@@ -24,7 +24,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     document.querySelector(".loading-screen").style.display = "none";
   } catch (error) {
     console.error("⚠️ Error loading Libereum content:", error);
-    redirectToError("⚠️ Failed to load content");
+    redirectToError("fetch-error", "");
   }
 });
 
@@ -60,9 +60,12 @@ async function getLiberumContent(domain) {
   return "❌ Error: No data";
 }
 
-function redirectToError(message) {
+function redirectToError(type, domain) {
+  let sendDomain = domain || "";
   const errorPage = chrome.runtime.getURL(
-    `pages/error.html?message=${encodeURIComponent(message)}`
+    `pages/error.html?pageType=${encodeURIComponent(
+      type
+    )}&domain=${encodeURIComponent(sendDomain)}`
   );
   window.location.href = errorPage;
 }
