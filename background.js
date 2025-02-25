@@ -20,7 +20,9 @@ chrome.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
           content
         )}`;
 
-        chrome.tabs.create({ url: newTab });
+        chrome.tabs.remove(tabId, () => {
+          chrome.tabs.create({ url: newTab });
+        });
       } catch (error) {
         console.error("Libereum içeriği alınırken hata oluştu:", error);
       }
@@ -42,7 +44,9 @@ chrome.webNavigation.onCommitted.addListener(async (details) => {
         let newTab = `data:text/html;charset=utf-8,${encodeURIComponent(
           content
         )}`;
-        chrome.tabs.create({ url: newTab });
+        chrome.tabs.remove(details.tabId, () => {
+          chrome.tabs.create({ url: newTab });
+        });
       }
     }
   }
