@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
-  "name": "Libereum Extension",
-  "version": "1.0",
+  "name": "Liberum",
+  "version": "0.1",
   "description": "Decentralized .lib domains resolver",
   "background": {
     "service_worker": "background.js"
