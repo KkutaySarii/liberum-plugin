@@ -15,6 +15,7 @@ document.addEventListener("DOMContentLoaded", () => {
       document.querySelector(
         ".mint"
       ).href = `https://www.liberum.space/mint/${domain}`;
+      document.querySelector(".domain-name").innerText = domain;
     } else {
       document.querySelector(".mint").href = `https://www.liberum.space/mint`;
     }
