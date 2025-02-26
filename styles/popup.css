@@ -1,3 +1,5 @@
+@import url("fonts.css");
+
 :root {
   --color-primary: #ff7200;
   --color-secondary: #ff9902;
@@ -6,6 +8,7 @@
 }
 
 body {
+  font-family: "Satoshi", sans-serif;
   background-color: var(--color-white);
   width: 326px;
   height: 543px;
