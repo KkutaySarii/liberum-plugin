@@ -1,4 +1,7 @@
+@import url("../styles/fonts.css");
+
 #liberum-loading {
+  font-family: "Satoshi", sans-serif;
   height: 100vh !important;
 }
 

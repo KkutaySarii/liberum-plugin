@@ -10,12 +10,15 @@
     <link rel="stylesheet" href="../styles/popup.css">
     <link rel="stylesheet" href="../styles/loading.css">
     <script src="blockspace.js"></script>
+    <script src="../lib/contants.js">
+    </script>
+    <script src="../js/ethers.umd.min.js"></script>
 </head>
 
 <body>
     <header>
         <div class="logo">
-            <a href="https://www.liberum.space/home" rel="noopener noreferrer">
+            <a href="https://www.liberum.space/home" rel="noopener noreferrer" target="_blank">
                 <img src="../resources/logo.png" alt="logo" />
             </a>
         </div>
@@ -30,16 +33,16 @@
                     ">Blockspace Name</p>
                 <p class="info-text"></p>
             </div>
-            <div class="info linked-content">
+            <a rel="noopener noreferrer" target="_blank" class="info linked-content">
                 <p class="info-title
                     ">Linked Content</p>
-                <p class="info-text"></p>
-            </div>
-            <div class="info owner">
+                <p class="info-text truncate"></p>
+            </a>
+            <a rel="noopener noreferrer" target="_blank" class="info owner">
                 <p class="info-title
                     ">Owner</p>
-                <p class="info-text"></p>
-            </div>
+                <p class="info-text truncate"></p>
+            </a>
             <div class="info created-time">
                 <p class="info-title">Created Time</p>
                 <p class="info-text"></p>

@@ -43,3 +43,10 @@
   opacity: 0.8;
   margin-top: 10px;
 }
+
+.truncate {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  text-decoration: underline;
+}

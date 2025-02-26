@@ -124,30 +124,31 @@ document.addEventListener("DOMContentLoaded", function () {
 
     try {
       const provider = new ethers.providers.JsonRpcProvider(RPC_URL);
-      const contract = new ethers.Contract(
-        GET_TOKEN_CONTRACT_ADDRESS,
-        GET_TOKEN_ID_ABI,
+      const domainContract = new ethers.Contract(
+        domainContractAddress,
+        domainContractABI,
         provider
       );
 
-      const tokenID = await contract.getTokenIdByDomain(query);
+      const htmlPageFactoryContract = new ethers.Contract(
+        htmlPageFactoryAddress,
+        htmlPageFactoryABI,
+        provider
+      );
 
-      if (tokenID) {
-        const pageContract = new ethers.Contract(
-          PAGE_LINKED_CONTRACT_ADDRESS,
-          PAGE_LINKED_ABI,
-          provider
+      const tokenId = await domainContract.getTokenIdByDomain(query);
+
+      if (tokenId) {
+        const contentAddress = await htmlPageFactoryContract.getLinkedDomain(
+          tokenId
         );
-
-        const CA_HTML = await pageContract.pageLinkedDomain(tokenID);
-
-        if (CA_HTML) {
+        if (contentAddress) {
           const HTML_CONTRACT = new ethers.Contract(
-            CA_HTML,
+            contentAddress,
             HTML_ABI,
             provider
           );
-          const content = await HTML_CONTRACT.getContent();
+          const content = await HTML_CONTRACT.GET("");
           if (content) {
             let newTab = `data:text/html;charset=utf-8,${encodeURIComponent(
               content

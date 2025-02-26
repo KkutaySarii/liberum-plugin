@@ -31,25 +31,31 @@ document.addEventListener("DOMContentLoaded", async () => {
 async function getLiberumContent(domain) {
   const provider = new ethers.providers.JsonRpcProvider(RPC_URL);
   const domainContract = new ethers.Contract(
-    GET_TOKEN_CONTRACT_ADDRESS,
-    GET_TOKEN_ID_ABI,
+    domainContractAddress,
+    domainContractABI,
+    provider
+  );
+
+  const htmlPageFactoryContract = new ethers.Contract(
+    htmlPageFactoryAddress,
+    htmlPageFactoryABI,
     provider
   );
 
   try {
-    const tokenID = await domainContract.getTokenIdByDomain(domain);
+    const tokenId = await domainContract.getTokenIdByDomain(domain);
 
-    if (tokenID) {
-      const pageContract = new ethers.Contract(
-        PAGE_LINKED_CONTRACT_ADDRESS,
-        PAGE_LINKED_ABI,
-        provider
+    if (tokenId) {
+      const contentAddress = await htmlPageFactoryContract.getLinkedDomain(
+        tokenId
       );
-      const CA_HTML = await pageContract.pageLinkedDomain(tokenID);
-
-      if (CA_HTML) {
-        const HTML_CONTRACT = new ethers.Contract(CA_HTML, HTML_ABI, provider);
-        const content = await HTML_CONTRACT.getContent();
+      if (contentAddress) {
+        const HTML_CONTRACT = new ethers.Contract(
+          contentAddress,
+          HTML_ABI,
+          provider
+        );
+        const content = await HTML_CONTRACT.GET("");
         return content || "❌ No content found";
       }
     }
