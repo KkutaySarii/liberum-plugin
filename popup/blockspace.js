@@ -3,49 +3,36 @@ document.addEventListener("DOMContentLoaded", async () => {
   const blockspaceInfo = document.querySelector(".info-container");
   const errorScreen = document.querySelector(".error-screen");
 
-  const blockspaceName = document.querySelector(".blockspace-name .info-text");
-  const linkedContent = document.querySelector(".linked-content .info-text");
-  const owner = document.querySelector(".owner .info-text");
-  const createdTime = document.querySelector(".created-time .info-text");
-  const updatedTime = document.querySelector(".updated-time .info-text");
-
-  const linkedContentLink = document.querySelector(".linked-content");
-  const ownerLink = document.querySelector(".owner");
-
   loadingScreen.style.display = "flex";
   blockspaceInfo.style.display = "none";
   errorScreen.style.display = "none";
 
-  const blockspaceData = await fetchBlockspaceInfo();
-
-  if (!blockspaceData) {
-    loadingScreen.style.display = "none";
-    blockspaceInfo.style.display = "none";
-    errorScreen.style.display = "flex";
+  const domain = await getActiveTabDomain();
+  if (!domain) {
+    showError();
     return;
   }
-  owner.innerText = blockspaceData.owner;
-  ownerLink.setAttribute(
-    "href",
-    `https://explorer-mammothon-g2-testnet-4a2w8v0xqy.t.conduit.xyz/address/${blockspaceData.owner}`
-  );
-  linkedContent.innerText = blockspaceData.content;
-  linkedContentLink.setAttribute(
-    "href",
-    `https://explorer-mammothon-g2-testnet-4a2w8v0xqy.t.conduit.xyz/address/${blockspaceData.content}`
-  );
-  blockspaceName.innerText = blockspaceData.name;
-  createdTime.innerText = formatDate(blockspaceData.createdAt);
-  updatedTime.innerText = formatDate(blockspaceData.updatedAt);
 
-  loadingScreen.style.display = "none";
-  blockspaceInfo.style.display = "block";
-  errorScreen.style.display = "none";
+  chrome.storage.local.get([domain], async (result) => {
+    if (result[domain]) {
+      console.log("📂 Cache’den Veri Alındı:", result[domain]);
+      updateUI(result[domain]);
+    } else {
+      console.log("🔄 Kontrattan Yeni Veri Çekiliyor...");
+      const blockspaceData = await fetchBlockspaceInfo(domain);
+
+      if (!blockspaceData) {
+        showError();
+        return;
+      }
+
+      chrome.storage.local.set({ [domain]: blockspaceData });
+      updateUI(blockspaceData);
+    }
+  });
 });
 
-async function fetchBlockspaceInfo() {
-  const domain = await getActiveTabDomain();
-
+async function fetchBlockspaceInfo(domain) {
   try {
     const provider = new ethers.providers.JsonRpcProvider(RPC_URL);
     const domainContract = new ethers.Contract(
@@ -61,39 +48,69 @@ async function fetchBlockspaceInfo() {
     );
 
     const tokenId = await domainContract.getTokenIdByDomain(domain);
+    if (!tokenId) return null;
 
-    if (tokenId) {
-      const contentAddress = await htmlPageFactoryContract.getLinkedDomain(
-        tokenId
-      );
+    const contentAddress = await htmlPageFactoryContract.getLinkedDomain(
+      tokenId
+    );
+    if (!contentAddress) return null;
 
-      if (contentAddress) {
-        const HTML_CONTRACT = new ethers.Contract(
-          contentAddress,
-          HTML_ABI,
-          provider
-        );
-        const owner = await HTML_CONTRACT.owner();
+    const HTML_CONTRACT = new ethers.Contract(
+      contentAddress,
+      HTML_ABI,
+      provider
+    );
+    const owner = await HTML_CONTRACT.owner();
+    const createdTimestamp = await HTML_CONTRACT.createdTimestamp();
+    const updatedTimestamp = await HTML_CONTRACT.updatedTimestamp();
 
-        const createdTimestamp = await HTML_CONTRACT.createdTimestamp();
-        const updatedTimestamp = await HTML_CONTRACT.updatedTimestamp();
-
-        console.log(contentAddress);
-
-        return {
-          name: domain,
-          content: contentAddress,
-          owner,
-          createdAt: createdTimestamp.toNumber() * 1000,
-          updatedAt: updatedTimestamp.toNumber() * 1000,
-        };
-      }
-    }
+    return {
+      name: domain,
+      content: contentAddress,
+      owner,
+      createdAt: createdTimestamp.toNumber() * 1000,
+      updatedAt: updatedTimestamp.toNumber() * 1000,
+    };
   } catch (error) {
     console.error("Kontrattan içerik çekme hatası:", error);
     return null;
-  } finally {
   }
+}
+
+function updateUI(blockspaceData) {
+  document.querySelector(".loading-screen").style.display = "none";
+  document.querySelector(".info-container").style.display = "block";
+  document.querySelector(".error-screen").style.display = "none";
+
+  document.querySelector(".blockspace-name .info-text").innerText =
+    blockspaceData.name;
+  document.querySelector(".linked-content .info-text").innerText =
+    blockspaceData.content;
+  document
+    .querySelector(".linked-content")
+    .setAttribute(
+      "href",
+      `https://explorer-mammothon-g2-testnet-4a2w8v0xqy.t.conduit.xyz/address/${blockspaceData.content}`
+    );
+  document.querySelector(".owner .info-text").innerText = blockspaceData.owner;
+  document
+    .querySelector(".owner")
+    .setAttribute(
+      "href",
+      `https://explorer-mammothon-g2-testnet-4a2w8v0xqy.t.conduit.xyz/address/${blockspaceData.owner}`
+    );
+  document.querySelector(".created-time .info-text").innerText = formatDate(
+    blockspaceData.createdAt
+  );
+  document.querySelector(".updated-time .info-text").innerText = formatDate(
+    blockspaceData.updatedAt
+  );
+}
+
+function showError() {
+  document.querySelector(".loading-screen").style.display = "none";
+  document.querySelector(".info-container").style.display = "none";
+  document.querySelector(".error-screen").style.display = "flex";
 }
 
 function formatDate(date) {
@@ -107,7 +124,7 @@ async function getActiveTabDomain() {
         try {
           const currentUrl = new URL(tabs[0].url);
           const domain = currentUrl.search.split("domain=")[1];
-          if (domain.endsWith(".lib")) {
+          if (domain && domain.endsWith(".lib")) {
             resolve(domain);
             return;
           }
