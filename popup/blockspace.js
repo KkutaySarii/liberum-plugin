@@ -1,6 +1,7 @@
 document.addEventListener("DOMContentLoaded", async () => {
   const loadingScreen = document.querySelector(".loading-screen");
   const blockspaceInfo = document.querySelector(".info-container");
+  const errorScreen = document.querySelector(".error-screen");
 
   const blockspaceName = document.querySelector(".blockspace-name .info-text");
   const linkedContent = document.querySelector(".linked-content .info-text");
@@ -13,35 +14,33 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   loadingScreen.style.display = "flex";
   blockspaceInfo.style.display = "none";
+  errorScreen.style.display = "none";
 
   const blockspaceData = await fetchBlockspaceInfo();
 
-  if (blockspaceData.content) {
-    linkedContent.innerText = blockspaceData.content;
-    linkedContentLink.setAttribute(
-      "href",
-      `https://explorer-mammothon-g2-testnet-4a2w8v0xqy.t.conduit.xyz/address/${blockspaceData.content}`
-    );
-  } else {
-    console.warn("⚠️ content değeri bulunamadı.");
+  if (!blockspaceData) {
+    loadingScreen.style.display = "none";
+    blockspaceInfo.style.display = "none";
+    errorScreen.style.display = "flex";
+    return;
   }
-
-  if (blockspaceData.owner) {
-    owner.innerText = blockspaceData.owner;
-    ownerLink.setAttribute(
-      "href",
-      `https://explorer-mammothon-g2-testnet-4a2w8v0xqy.t.conduit.xyz/address/${blockspaceData.owner}`
-    );
-  } else {
-    console.warn("⚠️ owner değeri bulunamadı.");
-  }
-
+  owner.innerText = blockspaceData.owner;
+  ownerLink.setAttribute(
+    "href",
+    `https://explorer-mammothon-g2-testnet-4a2w8v0xqy.t.conduit.xyz/address/${blockspaceData.owner}`
+  );
+  linkedContent.innerText = blockspaceData.content;
+  linkedContentLink.setAttribute(
+    "href",
+    `https://explorer-mammothon-g2-testnet-4a2w8v0xqy.t.conduit.xyz/address/${blockspaceData.content}`
+  );
   blockspaceName.innerText = blockspaceData.name;
   createdTime.innerText = formatDate(blockspaceData.createdAt);
   updatedTime.innerText = formatDate(blockspaceData.updatedAt);
 
   loadingScreen.style.display = "none";
   blockspaceInfo.style.display = "block";
+  errorScreen.style.display = "none";
 });
 
 async function fetchBlockspaceInfo() {
@@ -92,7 +91,7 @@ async function fetchBlockspaceInfo() {
     }
   } catch (error) {
     console.error("Kontrattan içerik çekme hatası:", error);
-    alert("İçerik yüklenirken hata oluştu!");
+    return null;
   } finally {
   }
 }
