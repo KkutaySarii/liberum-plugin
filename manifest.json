@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "Liberum",
   "version": "0.1",
-  "description": "Decentralized .lib domains resolver",
+  "description": "Access decentralized .lib domains with Liberum, a blockchain-based extension for a secure and censorship-resistant web.",
   "background": {
     "service_worker": "background.js"
   },
@@ -11,15 +11,7 @@
     "48": "icons/liberum-48.png",
     "96": "icons/liberum-96.png"
   },
-  "permissions": [
-    "tabs",
-    "scripting",
-    "storage",
-    "activeTab",
-    "webNavigation",
-    "webRequest",
-    "webRequestBlocking"
-  ],
+  "permissions": ["tabs", "scripting", "storage", "activeTab", "webNavigation"],
   "host_permissions": ["*://*.lib/*", "*://www.google.com/*"],
   "action": {
     "default_popup": "popup/liberum-popup.html",

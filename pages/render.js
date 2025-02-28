@@ -19,6 +19,8 @@ document.addEventListener("DOMContentLoaded", async () => {
       return;
     }
 
+    updateVisit(domain);
+
     document.getElementById("liberum-content").innerHTML = content;
     document.getElementById("liberum-content").style.display = "block";
     document.querySelector(".loading-screen").style.display = "none";
