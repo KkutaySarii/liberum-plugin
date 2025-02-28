@@ -16,7 +16,7 @@ Liberum is a browser extension that enables users to seamlessly access decentral
 
 1. Clone this repository:
    ```sh
-   git clone https://github.com/yourusername/liberum-extension.git
+   git clone https://github.com/KkutaySarii/liberum-plugin.git
    ```
 2. Open **Google Chrome** and navigate to `chrome://extensions/`.
 3. Enable **Developer mode** (toggle in the top-right corner).
